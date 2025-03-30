@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nursing Information System</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Ethiopic:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Serif Ethiopic', serif;
+            background-color: #f0f8ff;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .left-panel {
+            background-color: #e0f7fa;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .left-panel h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 300px;
+            height: 300px;
+            border-radius: 300px;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            padding: 20px;
+        }
+
+        .form-container {
+           width: 100%;
+           max-width: 400px;
+           padding: 30px;
+           border-radius: 10px;
+           background-color: transparent;
+        }
+
+        .form-container h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+            color: WHITE;
+        }
+
+        .tagline {
+            font-size: 30px;
+            margin-bottom: 20px;
+            color: #555;
+            width: 180%; /* Make it wider */
+            text-align: left;
+            margin-left: -40%;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        .input-group input {
+            padding-left: 35px;
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: #e0f7fa;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            background-color: #b2ebf2;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 100%;
+            height: 40px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #5284ad;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <h1>Nursing Information System</h1>
+            <img src="NISLOGO.jpg" alt="NIS Logo" class="logo">
+        </div>
+        <div class="right-panel">
+            <!-- Login Form -->
+            <div class="form-container" id="login-form">
+                <h2 class="tagline">Thank you for choosing us, and for your unwavering trust</h2>    
+                <h2>Log in</h2>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="login-username" placeholder="Username" />
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="login-password" placeholder="Password" />
+                </div>
+                <div class="options">
+                    <label><input type="checkbox" id="remember-me"> Remember Me</label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+                <button onclick="login()">LOG IN</button>
+                <div class="social-login">
+                    <a href="#"><img src="icons8-facebook-24.png" alt="Facebook"></a>
+                    <a href="#"><img src="icons8-instagram-24.png" alt="Instagram"></a>
+                </div>
+                <p class="signup-link"><a href="#" onclick="showSignUp()">Sign Up</a></p>
+                <p id="login-message" style="color:red;"></p>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div class="form-container" id="signup-form" style="display:none;">
+                <h2>Sign Up</h2>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="signup-fullname" placeholder="Fullname" />
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="signup-username" placeholder="Username" />
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="signup-password" placeholder="Password" />
+                </div>
+                <button onclick="signUp()">SIGN UP</button>
+                <p><a href="#" onclick="showLogin()">Back to Login</a></p>
+                <p id="signup-message" style="color:green;"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize default admin account
+        function initializeDefaultAccount() {
+            const users = getUsers();
+            const adminExists = users.some(user => user.username === 'admin');
+
+            if (!adminExists) {
+                users.push({ fullname: 'Administrator', username: 'admin', password: 'admin' });
+                saveUsers(users);
+            }
+        }
+
+        function showSignUp() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('signup-form').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
+
+        function getUsers() {
+            const users = localStorage.getItem('nis_users');
+            return users ? JSON.parse(users) : [];
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem('nis_users', JSON.stringify(users));
+        }
+
+        function signUp() {
+            const fullname = document.getElementById('signup-fullname').value.trim();
+            const username = document.getElementById('signup-username').value.trim();
+            const password = document.getElementById('signup-password').value;
+
+            if (fullname && username && password) {
+                let users = getUsers();
+                const userExists = users.some(user => user.username === username);
+
+                if (userExists) {
+                    document.getElementById('signup-message').style.color = 'red';
+                    document.getElementById('signup-message').innerText = 'Username already exists!';
+                    return;
+                }
+
+                users.push({ fullname, username, password });
+                saveUsers(users);
+
+                document.getElementById('signup-message').style.color = 'green';
+                document.getElementById('signup-message').innerText = 'Sign up successful! Please log in.';
+
+                setTimeout(() => {
+                    showLogin();
+                }, 1500);
+            } else {
+                document.getElementById('signup-message').style.color = 'red';
+                document.getElementById('signup-message').innerText = 'Please fill all fields.';
+            }
+        }
+
+        function login() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            const users = getUsers();
+            const matchedUser = users.find(user => user.username === username && user.password === password);
+
+            if (matchedUser) {
+                document.getElementById('login-message').style.color = 'green';
+                document.getElementById('login-message').innerText = 'Login successful! Welcome, ' + matchedUser.fullname;
+
+                setTimeout(() => {
+                    window.location.href = "NIS.html";
+                }, 1000);
+            } else {
+                document.getElementById('login-message').style.color = 'red';
+                document.getElementById('login-message').innerText = 'Invalid username or password.';
+            }
+        }
+
+        // Initialize the default admin account on page load
+        initializeDefaultAccount();
+    </script>
+</body>
+</html>
